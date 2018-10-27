@@ -3,12 +3,13 @@ GOBUILD=$(GOCMD) build
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 
-BINARY=todo
+BINARY=td
 
+.PHONY: test build clean
 all: test build
 
 build:
-	$(GOBUILD) -o $(BINARY) -v ./...
+	$(GOBUILD) -o $(BINARY) main.go
 
 test:
 	$(GOTEST) -v ./...
