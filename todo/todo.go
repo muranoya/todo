@@ -92,9 +92,9 @@ func (todo *Todo) AllDone() int {
 	}
 
 	var change_num = 0
-	for _, v := range todo.Items {
+	for i, v := range todo.Items {
 		if !v.Done {
-			v.Done = true
+			todo.Items[i].Done = true
 			change_num++
 		}
 	}

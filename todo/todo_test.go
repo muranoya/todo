@@ -75,7 +75,7 @@ func TestMaxID(t *testing.T) {
 }
 
 func TestFindID(t *testing.T) {
-    // existed ID
+	// existed ID
 	{
 		var todo = createTodoItems()
 		idx, exist := todo.FindID(2)
@@ -83,123 +83,128 @@ func TestFindID(t *testing.T) {
 			t.Fail()
 		}
 	}
-    // Find in empty todo items
-    {
-        var todo = createEmptyTodoItems()
-        _, exist := todo.FindID(1)
-        if exist {
-            t.Fail()
-        }
-    }
-    // Not found id
-    {
-        var todo = createTodoItems()
-        _, exist := todo.FindID(10)
-        if exist {
-            t.Fail()
-        }
-    }
+	// Find in empty todo items
+	{
+		var todo = createEmptyTodoItems()
+		_, exist := todo.FindID(1)
+		if exist {
+			t.Fail()
+		}
+	}
+	// Not found id
+	{
+		var todo = createTodoItems()
+		_, exist := todo.FindID(10)
+		if exist {
+			t.Fail()
+		}
+	}
 }
 
 func TestAddTodo(t *testing.T) {
-    // add new item to empty todo items
-    {
-        var todo = createEmptyTodoItems()
-        if err := todo.AddTodo("new todo", "this is for test of AddTodo"); err != nil {
-            t.Fail()
-        }
-    }
-    // add new item
-    {
-        var todo = createTodoItems()
-        var items_len = len(todo.Items)
-        if err := todo.AddTodo("new todo", "this is for test of AddTodo"); err != nil {
-            t.Fail()
-        }
-        if items_len + 1 != len(todo.Items) {
-            t.Fail()
-        }
-    }
-    // Fail AddTodo because msg is empty
-    {
-        var todo = createTodoItems()
-        if err := todo.AddTodo("", "this is for test of AddTodo"); err == nil {
-            t.Fail()
-        }
-    }
+	// add new item to empty todo items
+	{
+		var todo = createEmptyTodoItems()
+		if err := todo.AddTodo("new todo", "this is for test of AddTodo"); err != nil {
+			t.Fail()
+		}
+	}
+	// add new item
+	{
+		var todo = createTodoItems()
+		var items_len = len(todo.Items)
+		if err := todo.AddTodo("new todo", "this is for test of AddTodo"); err != nil {
+			t.Fail()
+		}
+		if items_len+1 != len(todo.Items) {
+			t.Fail()
+		}
+	}
+	// Fail AddTodo because msg is empty
+	{
+		var todo = createTodoItems()
+		if err := todo.AddTodo("", "this is for test of AddTodo"); err == nil {
+			t.Fail()
+		}
+	}
 }
 
 func TestAllDone(t *testing.T) {
-    // empty todo items
-    {
-        var todo = createEmptyTodoItems()
-        var change_num = todo.AllDone()
-        if change_num != 0 {
-            t.Fail()
-        }
-    }
-    // success AllDone
-    {
-        var todo = createTodoItems()
-        var change_num = todo.AllDone()
-        if change_num != 4 {
-            t.Fail()
-        }
-    }
+	// empty todo items
+	{
+		var todo = createEmptyTodoItems()
+		var change_num = todo.AllDone()
+		if change_num != 0 {
+			t.Fail()
+		}
+	}
+	// success AllDone
+	{
+		var todo = createTodoItems()
+		var change_num = todo.AllDone()
+		if change_num != 4 {
+			t.Fail()
+		}
+		for _, v := range todo.Items {
+			if !v.Done {
+				t.Fail()
+			}
+		}
+	}
 }
 
 func TestSetStatus(t *testing.T) {
-    // empty todo items
-    {
-        var todo = createEmptyTodoItems()
-        if err := todo.SetStatus(0, true); err == nil {
-            t.Fail()
-        }
-    }
-    // change status to done from incomplete
-    {
-        var todo = createTodoItems()
-        if err := todo.SetStatus(3, false); err != nil {
-            t.Fail()
-        }
-        var change_num = todo.AllDone()
-        if change_num != 5 {
-            t.Fail()
-        }
-    }
-    // change status to incomplete from done
-    {
-        var todo = createTodoItems()
-        if err := todo.SetStatus(1, true); err != nil {
-            t.Fail()
-        }
-        var change_num = todo.AllDone()
-        if change_num != 3 {
-            t.Fail()
-        }
-    }
+	// empty todo items
+	{
+		var todo = createEmptyTodoItems()
+		if err := todo.SetStatus(0, true); err == nil {
+			t.Fail()
+		}
+	}
+	// change status to done from incomplete
+	{
+		var todo = createTodoItems()
+		if err := todo.SetStatus(3, false); err != nil {
+			t.Fail()
+		}
+		var change_num = todo.AllDone()
+		if change_num != 5 {
+			t.Fail()
+		}
+	}
+	// change status to incomplete from done
+	{
+		var todo = createTodoItems()
+		if err := todo.SetStatus(1, true); err != nil {
+			t.Fail()
+		}
+		var change_num = todo.AllDone()
+		if change_num != 3 {
+			t.Fail()
+		}
+	}
 }
 
 func TestClean(t *testing.T) {
-    // empty todo items
-    {
-        var todo = createEmptyTodoItems()
-        var items_len = len(todo.Items)
-        todo.Clean()
-        if items_len != 0 || len(todo.Items) != 0 {
-            t.Fail()
-        }
-    }
-    // remove item
-    {
-        var todo = createTodoItems()
-        todo.Clean()
-        if len(todo.Items) != 4 {
-            t.Fail()
-        }
-        todo.Clean()
-        if len(todo.Items) != 4 {
-            t.Fail()
-        }
-    }
+	// empty todo items
+	{
+		var todo = createEmptyTodoItems()
+		var items_len = len(todo.Items)
+		todo.Clean()
+		if items_len != 0 || len(todo.Items) != 0 {
+			t.Fail()
+		}
+	}
+	// remove item
+	{
+		var todo = createTodoItems()
+		todo.Clean()
+		if len(todo.Items) != 4 {
+			t.Fail()
+		}
+		todo.Clean()
+		if len(todo.Items) != 4 {
+			t.Fail()
+		}
+	}
 }

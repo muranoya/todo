@@ -128,9 +128,9 @@ func main() {
 		var uncmplid int
 		var clean bool
 		done := flag.NewFlagSet("done", flag.ExitOnError)
-		done.BoolVar(&all, "all", false, "Purge all todos.")
+		done.BoolVar(&all, "all", false, "All incomplete todos makes done.")
 		done.IntVar(&doneid, "id", -1, "Set done.")
-		done.IntVar(&uncmplid, "unset", -1, "Unset done.")
+		done.IntVar(&uncmplid, "unset", -1, "Make finished todo incomplete.")
 		done.BoolVar(&clean, "clean", false, "Clean todos.")
 		done.Parse(os.Args[2:])
 		if err := doneTodo(all, doneid, uncmplid, clean); err != nil {
