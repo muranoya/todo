@@ -46,11 +46,15 @@ func saveTodoData(path string, todo todo.Todo) error {
 }
 
 func addTodo(msg, detail string) error {
+	// Ignore error because addTodo is use to create new JSON file
+	// when the JSON file has not exist yet.
 	todo, _ := loadTodoData(getJsonDataPath())
 	if err := todo.AddTodo(msg, detail); err != nil {
 		return err
 	}
-	saveTodoData(getJsonDataPath(), todo)
+	if err := saveTodoData(getJsonDataPath(), todo); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -90,8 +94,9 @@ func doneTodo(alldone bool, doneid int, uncmplid int, clean bool) error {
 		todo.Clean()
 	}
 
-	saveTodoData(getJsonDataPath(), todo)
-
+	if err := saveTodoData(getJsonDataPath(), todo); err != nil {
+		return err
+	}
 	return nil
 }
 

@@ -5,14 +5,17 @@ GOTEST=$(GOCMD) test
 
 BINARY=td
 
-.PHONY: test build clean
-all: test build
+.PHONY: test build clean check
+all: check test build
 
 build:
 	$(GOBUILD) -o $(BINARY) main.go
 
 test:
 	$(GOTEST) -v ./...
+
+check:
+	errcheck -exclude errcheck_excludes.txt -asserts -verbose ./...
 
 clean:
 	$(GOCLEAN)

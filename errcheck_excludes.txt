@@ -1,0 +1,2 @@
+(*flag.FlagSet).Parse
+fmt.Fprintln
