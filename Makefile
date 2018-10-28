@@ -1,21 +1,27 @@
 GOCMD=go
 GOBUILD=$(GOCMD) build
+GOFMT=gofmt
 GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 
 BINARY=td
 
-.PHONY: test build clean check
-all: check test build
+.PHONY: test build clean check fmt
+all: fmt check test build
 
-build:
-	$(GOBUILD) -o $(BINARY) main.go
+fmt:
+	$(GOFMT) -s -l -e -w .
+
+check:
+	errcheck -exclude errcheck_excludes.txt -asserts -verbose ./...
+	go vet .
+	golint
 
 test:
 	$(GOTEST) -v ./...
 
-check:
-	errcheck -exclude errcheck_excludes.txt -asserts -verbose ./...
+build:
+	$(GOBUILD) -o $(BINARY) main.go
 
 clean:
 	$(GOCLEAN)

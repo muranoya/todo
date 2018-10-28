@@ -11,7 +11,7 @@ import (
 	"github.com/muranoya/todo/todo"
 )
 
-func getJsonDataPath() string {
+func getJSONDataPath() string {
 	if u, err := user.Current(); err != nil {
 		panic(err)
 	} else {
@@ -21,15 +21,15 @@ func getJsonDataPath() string {
 
 func loadTodoData(path string) (todo.Todo, error) {
 	var todo todo.Todo
-	if bytes, err := ioutil.ReadFile(path); err != nil {
+	bytes, err := ioutil.ReadFile(path)
+	if err != nil {
 		return todo, err
-	} else {
-		if err := json.Unmarshal(bytes, &todo); err != nil {
-			return todo, err
-		} else {
-			return todo, nil
-		}
 	}
+
+	if err := json.Unmarshal(bytes, &todo); err != nil {
+		return todo, err
+	}
+	return todo, nil
 }
 
 func saveTodoData(path string, todo todo.Todo) error {
@@ -40,26 +40,25 @@ func saveTodoData(path string, todo todo.Todo) error {
 
 	if err := ioutil.WriteFile(path, bytes, 0644); err != nil {
 		return err
-	} else {
-		return nil
 	}
+	return nil
 }
 
 func addTodo(msg, detail string) error {
 	// Ignore error because addTodo is use to create new JSON file
 	// when the JSON file has not exist yet.
-	todo, _ := loadTodoData(getJsonDataPath())
+	todo, _ := loadTodoData(getJSONDataPath())
 	if err := todo.AddTodo(msg, detail); err != nil {
 		return err
 	}
-	if err := saveTodoData(getJsonDataPath(), todo); err != nil {
+	if err := saveTodoData(getJSONDataPath(), todo); err != nil {
 		return err
 	}
 	return nil
 }
 
 func showTodo(allshow bool) error {
-	todo, err := loadTodoData(getJsonDataPath())
+	todo, err := loadTodoData(getJSONDataPath())
 	if err != nil {
 		return err
 	}
@@ -69,7 +68,7 @@ func showTodo(allshow bool) error {
 }
 
 func doneTodo(alldone bool, doneid int, uncmplid int, clean bool) error {
-	todo, err := loadTodoData(getJsonDataPath())
+	todo, err := loadTodoData(getJSONDataPath())
 	if err != nil {
 		return err
 	}
@@ -94,7 +93,7 @@ func doneTodo(alldone bool, doneid int, uncmplid int, clean bool) error {
 		todo.Clean()
 	}
 
-	if err := saveTodoData(getJsonDataPath(), todo); err != nil {
+	if err := saveTodoData(getJSONDataPath(), todo); err != nil {
 		return err
 	}
 	return nil
